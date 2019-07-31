@@ -1,0 +1,44 @@
+﻿<Application x:Class="Calculator.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Calculator"
+             xmlns:viewModels="clr-namespace:Calculator.ViewModels"
+             xmlns:views="clr-namespace:Calculator.Views"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            
+            <!-- 
+            Külső resource fájlok megadása 
+            -->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Styles/StyleDatas.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+
+
+            <!-- 
+            ViewModel, amelyet az XAML kódban használunk majd. 
+            Jelen esetben elég a MainViewModel a többi ViewModel elérhető azon keresztül.
+            -->
+            <viewModels:MainViewModel x:Key="MainViewModelData"></viewModels:MainViewModel>
+
+            <!-- 
+            View féjlok DataTemplate-ba rendezése a ContentControl számára. 
+            -->
+            <DataTemplate x:Key="CalculatorTemplate">
+                <views:CalculatorView></views:CalculatorView>
+            </DataTemplate>
+
+            <!-- ContentControl számára Style készítése, amelyben ha több View lenne, 
+            Trigger segítségével változtathatnánk a kiválasztott felhasználó módnak megfelelően
+            a betöltött DataTemplate-et 
+            -->
+            <Style x:Key="MainContentControlStyle" TargetType="ContentControl" >
+                <Setter Property="ContentTemplate" Value="{StaticResource CalculatorTemplate}"></Setter>
+            </Style>
+
+        </ResourceDictionary>
+        
+        
+    </Application.Resources>
+</Application>

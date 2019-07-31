@@ -1,0 +1,332 @@
+﻿<UserControl x:Class="Calculator.Views.CalculatorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:enums="clr-namespace:Calculator.Enums"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Loaded="UserControl_Loaded" Focusable="True">
+    <UserControl.Resources>
+        <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
+                            ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="enums:ModeEnum"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
+
+    <UserControl.InputBindings>
+        <!-- Első sor, -->
+        <KeyBinding Key="Esc" Command="{Binding OffButtonCommand, Mode=OneTime}" />
+
+        <!-- Második sor, -->
+        <KeyBinding Key="Y" Command="{Binding PowButtonCommand, Mode=OneTime}" CommandParameter="^" />
+        <KeyBinding Key="D8" Modifiers="Shift" Command="{Binding LeftParButtonCommand, Mode=OneTime}" CommandParameter="(" />
+        <KeyBinding Key="D9" Modifiers="Shift" Command="{Binding RightParButtonCommand, Mode=OneTime}" CommandParameter=")" />
+        <KeyBinding Key="NumPad7" Command="{Binding NumberButtonCommand, Mode=OneTime}" CommandParameter="7" />
+        <KeyBinding Key="D7" Command="{Binding NumberButtonCommand, Mode=OneTime}" CommandParameter="7" />
+        <KeyBinding Key="NumPad8" Command="{Binding NumberButtonCommand, Mode=OneTime}" CommandParameter="8" />
+        <KeyBinding Key="D8" Command="{Binding NumberButtonCommand, Mode=OneTime}" CommandParameter="8" />
+        <KeyBinding Key="NumPad9" Command="{Binding NumberButtonCommand, Mode=OneTime}" CommandParameter="9" />
+        <KeyBinding Key="D9" Command="{Binding NumberButtonCommand, Mode=OneTime}" CommandParameter="9" />
+        <KeyBinding Key="Delete" Command="{Binding DelButtonCommand, Mode=OneTime}" />
+        <KeyBinding Key="Backspace" Command="{Binding AcButtonCommand, Mode=OneTime}" />
+
+        <!-- Harmadik sor, -->
+        <KeyBinding Key="S" Command="{Binding TrigonometricFunctionsCommand, Mode=OneTime}" CommandParameter="{Binding SinButtonTextBlockValue}" />
+        <KeyBinding Key="C" Command="{Binding TrigonometricFunctionsCommand, Mode=OneTime}" CommandParameter="{Binding CosButtonTextBlockValue}" />
+        <KeyBinding Key="T" Command="{Binding TrigonometricFunctionsCommand, Mode=OneTime}" CommandParameter="{Binding TanButtonTextBlockValue}" />
+        <KeyBinding Key="D5" Modifiers="Shift" Command="{Binding ModButtonCommand, Mode=OneTime}" CommandParameter="%" />
+        <KeyBinding Key="NumPad4" Command="{Binding NumberButtonCommand, Mode=OneTime}" CommandParameter="4" />
+        <KeyBinding Key="D4" Command="{Binding NumberButtonCommand, Mode=OneTime}" CommandParameter="4" />
+        <KeyBinding Key="NumPad5" Command="{Binding NumberButtonCommand, Mode=OneTime}" CommandParameter="5" />
+        <KeyBinding Key="D5" Command="{Binding NumberButtonCommand, Mode=OneTime}" CommandParameter="5" />
+        <KeyBinding Key="NumPad6" Command="{Binding NumberButtonCommand, Mode=OneTime}" CommandParameter="6" />
+        <KeyBinding Key="D6" Command="{Binding NumberButtonCommand, Mode=OneTime}" CommandParameter="6" />
+        <KeyBinding Key="Multiply" Command="{Binding BasicArithmeticOperatorButtonCommand, Mode=OneTime}" CommandParameter="*" />
+        <KeyBinding Key="Divide" Command="{Binding BasicArithmeticOperatorButtonCommand, Mode=OneTime}" CommandParameter="/" />
+        <KeyBinding Key="D6" Modifiers="Shift" Command="{Binding  BasicArithmeticOperatorButtonCommand, Mode=OneTime}" CommandParameter="/" />
+
+        <!-- Negyedik sor, -->
+        <KeyBinding Key="N" Command="{Binding LnLogButtonCommand, Mode=OneTime}" CommandParameter="{Binding LnButtonTextBlockValue}" />
+        <KeyBinding Key="L" Command="{Binding LnLogButtonCommand, Mode=OneTime}" CommandParameter="{Binding LogButtonTextBlockValue}" />
+        <KeyBinding Key="Q" Command="{Binding TrigonometricFunctionsCommand, Mode=OneTime}" CommandParameter="sqrt" />
+        <KeyBinding Key="R" Command="{Binding RootButtonCommand, Mode=OneTime}" CommandParameter="yroot" />
+        <KeyBinding Key="NumPad1" Command="{Binding  NumberButtonCommand, Mode=OneTime}" CommandParameter="1" />
+        <KeyBinding Key="D1" Command="{Binding  NumberButtonCommand, Mode=OneTime}" CommandParameter="1" />
+        <KeyBinding Key="NumPad2" Command="{Binding  NumberButtonCommand, Mode=OneTime}" CommandParameter="2" />
+        <KeyBinding Key="D2" Command="{Binding  NumberButtonCommand, Mode=OneTime}" CommandParameter="2" />
+        <KeyBinding Key="NumPad3" Command="{Binding  NumberButtonCommand, Mode=OneTime}" CommandParameter="3" />
+        <KeyBinding Key="D3" Command="{Binding  NumberButtonCommand, Mode=OneTime}" CommandParameter="3" />
+        <KeyBinding Key="Add" Command="{Binding  BasicArithmeticOperatorButtonCommand, Mode=OneTime}" CommandParameter="+" />
+        <KeyBinding Key="D3" Modifiers="Shift" Command="{Binding  BasicArithmeticOperatorButtonCommand, Mode=OneTime}" CommandParameter="+" />
+        <KeyBinding Key="Subtract" Command="{Binding  BasicArithmeticOperatorButtonCommand, Mode=OneTime}" CommandParameter="-" />
+
+        <!-- Ötödik sor, -->
+        <KeyBinding Key="LeftShift" Modifiers="Shift" Command="{Binding  ShiftButtonCommand, Mode=OneTime}" />
+        <KeyBinding Key="E" Command="{Binding EButtonCommand, Mode=OneTime}" CommandParameter="e" />
+        <KeyBinding Key="D4" Modifiers="Shift" Command="{Binding FactButtonCommand, Mode=OneTime}" CommandParameter="!" />
+        <KeyBinding Key="NumPad0" Command="{Binding  NumberButtonCommand, Mode=OneTime}" CommandParameter="0" />
+        <KeyBinding Key="D0" Command="{Binding  NumberButtonCommand, Mode=OneTime}" CommandParameter="0" />
+        <KeyBinding Key="Decimal" Command="{Binding  NumberButtonCommand, Mode=OneTime}" CommandParameter="," />
+        <KeyBinding Key="A" Command="{Binding AnsButtonCommand, Mode=OneTime}" CommandParameter="Ans" />
+        <KeyBinding Key="Enter" Command="{Binding  EqualButtonCommand, Mode=OneTime}" CommandParameter="=" />
+        <KeyBinding Key="D7" Modifiers="Shift" Command="{Binding EqualButtonCommand, Mode=OneTime}" CommandParameter="=" />
+    </UserControl.InputBindings>
+
+    <Grid Background="{DynamicResource BodyColorBrush}">
+        <Grid.RowDefinitions>
+            <!-- 30% - 70%-ban osztott felület -->
+            <RowDefinition Height="0.3*"></RowDefinition>
+            <RowDefinition Height="0.7*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <!-- Header rész. -->
+        <Grid Grid.Row="0" Background="{DynamicResource HeaderColorBrush}">
+
+            <!--
+            Mode sor fix magas.
+            A maradék magasság 40% - 60%-ban elosztv a két sor között.
+            -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="0.4*" MinHeight="25"></RowDefinition>
+                <RowDefinition Height="0.6*" MinHeight="25"></RowDefinition>
+            </Grid.RowDefinitions>
+            <!-- Mode választó. -->
+            <StackPanel Height="25" Margin="0,0,10,0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+
+                <TextBlock Text="Mode" Margin="0,5,5,0" VerticalAlignment="Center"></TextBlock>
+                <ComboBox Margin="0,5,0,0" VerticalContentAlignment="Center" ItemsSource="{Binding Source={StaticResource dataFromEnum}}" SelectedItem="{Binding SelectedMode, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+
+            </StackPanel>
+
+            <TextBlock Grid.Row="1" Text="{Binding SeriesOfCumputerTextBoxValue}" HorizontalAlignment="Right" Margin="10,5,10,5"></TextBlock>
+
+            <!-- Beviteli mező. -->
+            <TextBox Grid.Row="2" Margin="10,0,10,5" TextAlignment="Right" Text="{Binding NumberTextBoxValue, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" x:Name="ValueTextBox" SizeChanged="TextBox_SizeChanged" MaxLines="1" Width="Auto" HorizontalAlignment="Stretch" IsReadOnly="True"></TextBox>
+
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="10,10,10,10" >
+            <Grid.RowDefinitions>
+                <RowDefinition ></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <!-- Első sor, -->
+            <Button Grid.Row="0" Grid.Column="8" Grid.ColumnSpan="2" Style="{DynamicResource FunctionButtonStyle}" Command="{Binding OffButtonCommand}">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="OFF"></TextBlock>
+                </Viewbox>
+            </Button>
+
+            <!-- Második sor. -->
+            <Button Grid.Row="1" Grid.Column="0" Style="{DynamicResource OperationButtonStyle}" Command="{Binding PowButtonCommand}" CommandParameter="^">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="xⁿ"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="1" Style="{DynamicResource OperationButtonStyle}" Command="{Binding SquareButtonCommand}">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="x²"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="2" Style="{DynamicResource OperationButtonStyle}" Command="{Binding LeftParButtonCommand}" CommandParameter="(">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="("></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="3" Style="{DynamicResource OperationButtonStyle}" Command="{Binding RightParButtonCommand}" CommandParameter=")">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text=")"></TextBlock>
+                </Viewbox>
+            </Button>
+
+            <Button Grid.Row="1" Grid.Column="5" Style="{DynamicResource NumericButtonStyle}" Command="{Binding NumberButtonCommand}" CommandParameter="7">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="7"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="6" Style="{DynamicResource NumericButtonStyle}" Command="{Binding NumberButtonCommand}" CommandParameter="8">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="8"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="7" Style="{DynamicResource NumericButtonStyle}" Command="{Binding NumberButtonCommand}" CommandParameter="9">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="9"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="8" Style="{DynamicResource FunctionButtonStyle}" Command="{Binding DelButtonCommand}" Padding="5">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="DEL"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="9" Style="{DynamicResource FunctionButtonStyle}" Command="{Binding AcButtonCommand}" Padding="5">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="AC"></TextBlock>
+                </Viewbox>
+            </Button>
+
+            <!-- Harmadik sor. -->
+            <Button Grid.Row="2" Grid.Column="0" Style="{DynamicResource OperationButtonStyle}" Command="{Binding TrigonometricFunctionsCommand}" CommandParameter="{Binding SinButtonTextBlockValue}">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="{Binding SinButtonTextBlockValue}"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="1" Style="{DynamicResource OperationButtonStyle}" Command="{Binding TrigonometricFunctionsCommand}" CommandParameter="{Binding CosButtonTextBlockValue}">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="{Binding CosButtonTextBlockValue}"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="2" Style="{DynamicResource OperationButtonStyle}" Command="{Binding TrigonometricFunctionsCommand}" CommandParameter="{Binding TanButtonTextBlockValue}">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="{Binding TanButtonTextBlockValue}"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="3" Style="{DynamicResource OperationButtonStyle}" Command="{Binding ModButtonCommand}" CommandParameter="%">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="%"></TextBlock>
+                </Viewbox>
+            </Button>
+
+            <Button Grid.Row="2" Grid.Column="5" Style="{DynamicResource NumericButtonStyle}" Command="{Binding NumberButtonCommand}" CommandParameter="4">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="4"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="6"  Style="{DynamicResource NumericButtonStyle}" Command="{Binding NumberButtonCommand}" CommandParameter="5">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="5"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="7" Style="{DynamicResource NumericButtonStyle}" Command="{Binding NumberButtonCommand}" CommandParameter="6">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="6"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="8" Style="{DynamicResource OperationButtonStyle}" Command="{Binding BasicArithmeticOperatorButtonCommand}" CommandParameter="*">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="*"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="9" Style="{DynamicResource OperationButtonStyle}" Command="{Binding BasicArithmeticOperatorButtonCommand}" CommandParameter="/">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="/"></TextBlock>
+                </Viewbox>
+            </Button>
+
+            <!-- Negyedik sor. -->
+            <Button Grid.Row="3" Grid.Column="0" Style="{DynamicResource OperationButtonStyle}" Command="{Binding LnLogButtonCommand}" CommandParameter="{Binding LnButtonTextBlockValue}">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="{Binding LnButtonTextBlockValue}"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="3" Grid.Column="1" Style="{DynamicResource OperationButtonStyle}" Command="{Binding LnLogButtonCommand}" CommandParameter="{Binding LogButtonTextBlockValue}">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="{Binding LogButtonTextBlockValue}"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="3" Grid.Column="2" Style="{DynamicResource OperationButtonStyle}" Command="{Binding TrigonometricFunctionsCommand}" CommandParameter="sqrt">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="√"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="3" Grid.Column="3" Style="{DynamicResource OperationButtonStyle}" Command="{Binding RootButtonCommand}" CommandParameter="yroot">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="ⁿ√ₓ"></TextBlock>
+                </Viewbox>
+            </Button>
+
+            <Button Grid.Row="3" Grid.Column="5" Style="{DynamicResource NumericButtonStyle}" Command="{Binding NumberButtonCommand}" CommandParameter="1">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="1"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="3" Grid.Column="6" Style="{DynamicResource NumericButtonStyle}" Command="{Binding NumberButtonCommand}" CommandParameter="2">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="2"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="3" Grid.Column="7" Style="{DynamicResource NumericButtonStyle}" Command="{Binding NumberButtonCommand}" CommandParameter="3">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="3"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="3" Grid.Column="8" Style="{DynamicResource OperationButtonStyle}" Command="{Binding BasicArithmeticOperatorButtonCommand}" CommandParameter="+">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="+"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="3" Grid.Column="9" Style="{DynamicResource OperationButtonStyle}" Command="{Binding BasicArithmeticOperatorButtonCommand}" CommandParameter="-">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="-"></TextBlock>
+                </Viewbox>
+            </Button>
+
+            <!-- Ötödik sor. -->
+            <Button Grid.Row="4" Grid.Column="0" Style="{DynamicResource OperationButtonStyle}" Command="{Binding ShiftButtonCommand}">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="Shift"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="4" Grid.Column="1" Style="{DynamicResource OperationButtonStyle}" Command="{Binding EButtonCommand}" CommandParameter="e">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="e"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="4" Grid.Column="2" Style="{DynamicResource OperationButtonStyle}" Command="{Binding FactButtonCommand}" CommandParameter="!">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="x!"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="4" Grid.Column="3" Style="{DynamicResource OperationButtonStyle}" Command="{Binding PlusMinusButtonCommand}">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="±"></TextBlock>
+                </Viewbox>
+            </Button>
+
+            <Button Grid.Row="4" Grid.Column="5" Grid.ColumnSpan="2" Style="{DynamicResource NumericButtonStyle}" Command="{Binding NumberButtonCommand}" CommandParameter="0">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="0"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="4" Grid.Column="7" Style="{DynamicResource NumericButtonStyle}" Command="{Binding NumberButtonCommand}" CommandParameter=",">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text=","></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="4" Grid.Column="8" Style="{DynamicResource OperationButtonStyle}" Command="{Binding AnsButtonCommand}" CommandParameter="Ans">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="Ans"></TextBlock>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="4" Grid.Column="9" Style="{DynamicResource OperationButtonStyle}" Command="{Binding EqualButtonCommand}" CommandParameter="=">
+                <Viewbox StretchDirection="Both" Stretch="Uniform">
+                    <TextBlock Text="="></TextBlock>
+                </Viewbox>
+            </Button>
+
+        </Grid>
+
+    </Grid>
+</UserControl>
