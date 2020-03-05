@@ -1,8 +1,7 @@
 ﻿using System.Windows;
 
-namespace Calculator
+namespace Calculator.Windows
 {
-
     public partial class MainWindow : Window
     {
         public MainWindow()
