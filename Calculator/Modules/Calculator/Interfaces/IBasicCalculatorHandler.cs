@@ -1,5 +1,5 @@
-﻿using Calculator.ViewModels.MainWindow;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Calculator.ViewModels.Views;
 
 namespace Calculator.Modules.Calculator.Interfaces
 {

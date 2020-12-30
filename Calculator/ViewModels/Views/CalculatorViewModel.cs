@@ -1,14 +1,15 @@
-﻿using Calculator.Commands;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Calculator.Commands;
 using Calculator.Constants;
 using Calculator.Enums;
 using Calculator.Modules.Calculator.Interfaces;
-using System;
-using System.Threading.Tasks;
-using System.Windows.Input;
+using Calculator.ViewModels.Views.Interfaces;
 
-namespace Calculator.ViewModels.MainWindow
+namespace Calculator.ViewModels.Views
 {
-    public class CalculatorViewModel : ViewModelBase
+    public class CalculatorViewModel : ViewModelBase, ICalculatorViewModel
     {
         private readonly IBasicCalculatorHandler _basicCalculatorHandler;
 

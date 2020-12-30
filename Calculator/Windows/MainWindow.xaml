@@ -21,6 +21,6 @@
             </Menu>
         </DockPanel>
 
-        <ContentControl Grid.Row="1" Content="{Binding}" Style="{StaticResource MainContentControlStyle}" DataContext="{Binding CalculatorViewModelData}"/>
+        <ContentControl Grid.Row="1" Content="{Binding}" Style="{StaticResource MainContentControlStyle}" DataContext="{Binding CalculatorViewModel}"/>
     </Grid>
 </Window>

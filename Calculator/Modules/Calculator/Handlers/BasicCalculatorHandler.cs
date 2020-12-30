@@ -1,13 +1,12 @@
-﻿using Calculator.Constants;
-using Calculator.Enums;
-using Calculator.ViewModels;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
+using Calculator.Constants;
+using Calculator.Enums;
 using Calculator.Modules.Calculator.Interfaces;
-using Calculator.ViewModels.MainWindow;
+using Calculator.ViewModels.Views;
 
 namespace Calculator.Modules.Calculator.Handlers
 {
@@ -16,7 +15,7 @@ namespace Calculator.Modules.Calculator.Handlers
         private readonly IBasicArithmeticOperatorHandler _basicArithmeticOperatorHandler;
         private readonly IRightParenthesisHandler _rightParenthesisHandler;
         private readonly ICalculateHandler _calculateHandler;
-        
+
         public CalculatorViewModel Model { get; set; }
 
         private readonly Queue<string> _postfixQueue;

@@ -74,8 +74,9 @@
     <Compile Include="Modules\Calculator\Handlers\BasicCalculatorHandler.cs" />
     <Compile Include="Modules\Calculator\Handlers\CalculateHandler.cs" />
     <Compile Include="Modules\Calculator\Handlers\RightParenthesisHandler.cs" />
-    <Compile Include="ViewModels\MainWindow\CalculatorViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\Views\Interfaces\ICalculatorViewModel.cs" />
+    <Compile Include="ViewModels\Views\CalculatorViewModel.cs" />
+    <Compile Include="ViewModels\Windows\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\CalculatorView.xaml.cs">
       <DependentUpon>CalculatorView.xaml</DependentUpon>
