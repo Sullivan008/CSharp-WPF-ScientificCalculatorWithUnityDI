@@ -36,9 +36,29 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.ConfigurationManager, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Configuration.ConfigurationManager.5.0.0\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Security.AccessControl, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.AccessControl.5.0.0\lib\net461\System.Security.AccessControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Permissions, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Permissions.5.0.0\lib\net461\System.Security.Permissions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Principal.Windows, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Principal.Windows.5.0.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml">
@@ -59,29 +79,78 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Behaviors\CloseBtnOnClickBehavior.cs" />
-    <Compile Include="Behaviors\CloseMenuItemOnClickBehavior.cs" />
-    <Compile Include="Behaviors\FocusBehavior.cs" />
-    <Compile Include="Constants\CalculatorViewModelTexts.cs" />
-    <Compile Include="Container\Unity\ServiceLocator.cs" />
-    <Compile Include="Enums\ModeEnum.cs" />
-    <Compile Include="Modules\Calculator\CommonCalculationHandler.cs" />
-    <Compile Include="Modules\Calculator\Interfaces\IBasicArithmeticOperatorHandler.cs" />
-    <Compile Include="Modules\Calculator\Interfaces\IBasicCalculatorHandler.cs" />
-    <Compile Include="Modules\Calculator\Interfaces\ICalculateHandler.cs" />
-    <Compile Include="Modules\Calculator\Interfaces\IRightParenthesisHandler.cs" />
-    <Compile Include="Modules\Calculator\Handlers\BasicArithmeticOperatorHandler.cs" />
-    <Compile Include="Modules\Calculator\Handlers\BasicCalculatorHandler.cs" />
-    <Compile Include="Modules\Calculator\Handlers\CalculateHandler.cs" />
-    <Compile Include="Modules\Calculator\Handlers\RightParenthesisHandler.cs" />
-    <Compile Include="ViewModels\Views\Interfaces\ICalculatorViewModel.cs" />
-    <Compile Include="ViewModels\Views\CalculatorViewModel.cs" />
-    <Compile Include="ViewModels\Windows\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\ViewModelBase.cs" />
-    <Compile Include="Views\CalculatorView.xaml.cs">
+    <Compile Include="Container\Bootstrapper.cs" />
+    <Compile Include="Container\Unity\DependencyInjector.cs" />
+    <Compile Include="Core\EnvironmentVariables\EnvironmentVariableKeys.cs" />
+    <Compile Include="Core\EnvironmentVariables\Enums\EnvironmentVariableKey.cs" />
+    <Compile Include="Core\Enums\EnvironmentType.cs" />
+    <Compile Include="Core\EnvironmentVariables\Exceptions\MissingEnvironmentVariableException.cs" />
+    <Compile Include="Core\Exceptions\Models\ErrorModel.cs" />
+    <Compile Include="Core\Services\EnvironmentService.cs" />
+    <Compile Include="Core\Services\Interfaces\IEnvironmentService.cs" />
+    <Compile Include="Views\Calculator\Behaviors\FocusBehavior.cs" />
+    <Compile Include="Core\CommandParameters\Interfaces\ICommandParameter.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\OffBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Converters\FunctionAndOperatorCommandParameterConverter.cs" />
+    <Compile Include="Views\Calculator\Converters\FunctionCommandParameterConverter.cs" />
+    <Compile Include="Views\Calculator\Converters\TrigonometricFunctionCommandParameterConverter.cs" />
+    <Compile Include="Views\Calculator\Converters\OperatorCommandParameterConverter.cs" />
+    <Compile Include="Views\Calculator\Converters\OperandCommandParameterConverter.cs" />
+    <Compile Include="Views\Calculator\Exceptions\NotAllowedElementInQueueException.cs" />
+    <Compile Include="Views\Calculator\Exceptions\NotAllowedOperatorInMethodException.cs" />
+    <Compile Include="Views\Calculator\Exceptions\SyntaxErrorException.cs" />
+    <Compile Include="Views\Calculator\Exceptions\UnknownElementInQueueException.cs" />
+    <Compile Include="Views\Calculator\Services\Helpers\CalculateService\FactorialHelper.cs" />
+    <Compile Include="Views\Calculator\StaticValues\Enums\FunctionType.cs" />
+    <Compile Include="Views\Calculator\StaticValues\Enums\OperatorType.cs" />
+    <Compile Include="Views\Calculator\StaticValues\Enums\OperationType.cs" />
+    <Compile Include="Views\Calculator\StaticValues\Enums\TrigonometricFunctionType.cs" />
+    <Compile Include="Views\Calculator\Enums\UserInteractionType.cs" />
+    <Compile Include="Core\Extensions\ArrayExtension.cs" />
+    <Compile Include="Core\Extensions\StringExtension.cs" />
+    <Compile Include="Views\Calculator\CommandParameters\FunctionAndOperatorCommandParameter.cs" />
+    <Compile Include="Views\Calculator\CommandParameters\FunctionCommandParameter.cs" />
+    <Compile Include="Views\Calculator\CommandParameters\OperatorCommandParameter.cs" />
+    <Compile Include="Views\Calculator\CommandParameters\TrigonometricFunctionCommandParameter.cs" />
+    <Compile Include="Views\Calculator\CommandParameters\OperandCommandParameter.cs" />
+    <Compile Include="Views\Calculator\CommandParameters\OperationCommandParameter.cs" />
+    <Compile Include="Views\Calculator\Converters\OperationCommandParameterConverter.cs" />
+    <Compile Include="Views\Calculator\Enums\AngleUnitType.cs" />
+    <Compile Include="Views\Calculator\Services\CalculateService.cs" />
+    <Compile Include="Views\Calculator\Services\CalculatorStorageService.cs" />
+    <Compile Include="Views\Calculator\Services\Interfaces\ICalculateService.cs" />
+    <Compile Include="Views\Calculator\Services\Interfaces\ICalculatorStorageService.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\AcBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\AnsBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\BasicArithmeticOperatorBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\CommaBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\DelBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\EBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\EqualBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\FactBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\LeftParenthesisBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\LnBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\LogBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\ModBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\OperandBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\PlusMinusBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\PowBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\RightParenthesisBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\YRootBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\ShiftBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\SqrtBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\SquareOfXNumberBtnCommand.cs" />
+    <Compile Include="Views\Calculator\Commands\CalculatorViewModel\TrigonometricFunctionBtnCommand.cs" />
+    <Compile Include="Views\Calculator\ViewModels\Interfaces\ICalculatorViewModel.cs" />
+    <Compile Include="Views\Calculator\ViewModels\CalculatorViewModel.cs" />
+    <Compile Include="Windows\Main\Commands\MainWindowsViewModel\CloseBtnCommand.cs" />
+    <Compile Include="Windows\Main\ViewModels\Interfaces\IMainWindowViewModel.cs" />
+    <Compile Include="Windows\Main\ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Core\ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\Calculator\CalculatorView.xaml.cs">
       <DependentUpon>CalculatorView.xaml</DependentUpon>
     </Compile>
-    <Page Include="Windows\MainWindow.xaml">
+    <Page Include="Windows\Main\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -89,16 +158,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\RelayCommandAsync.cs" />
-    <Compile Include="Windows\MainWindow.xaml.cs">
+    <Compile Include="Core\Commands\RelayCommandAsync.cs" />
+    <Compile Include="Views\Calculator\StaticValues\Functions.cs" />
+    <Compile Include="Views\Calculator\StaticValues\Operators.cs" />
+    <Compile Include="Views\Calculator\StaticValues\Operations.cs" />
+    <Compile Include="Windows\Main\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Styles\StyleDatas.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\CalculatorView.xaml">
+    <Page Include="Views\Calculator\CalculatorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

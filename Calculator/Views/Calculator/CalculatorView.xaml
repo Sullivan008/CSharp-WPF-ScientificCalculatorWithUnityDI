@@ -1,11 +1,12 @@
-﻿<UserControl x:Class="Calculator.Views.CalculatorView"
+﻿<UserControl x:Class="Calculator.Views.Calculator.CalculatorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:behaviors="clr-namespace:Calculator.Behaviors"
-             xmlns:converters="clr-namespace:Calculator.Converters.CalculatorView"
-             xmlns:enums="clr-namespace:Calculator.Enums.CalculatorView"
+             xmlns:behaviors="clr-namespace:Calculator.Views.Calculator.Behaviors"
+             xmlns:converters="clr-namespace:Calculator.Views.Calculator.Converters"
+             xmlns:enums="clr-namespace:Calculator.Views.Calculator.Enums"
+             xmlns:staticValueEnums="clr-namespace:Calculator.Views.Calculator.StaticValues.Enums"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
@@ -13,17 +14,10 @@
     <UserControl.Resources>
         <converters:OperandCommandParameterConverter x:Key="OperandCommandParameterConverter"></converters:OperandCommandParameterConverter>
         <converters:OperatorCommandParameterConverter x:Key="OperatorCommandParameterConverter"></converters:OperatorCommandParameterConverter>
-        <converters:OperationCommandParameterConverter x:Key="OperationCommandParameterConverter"></converters:OperationCommandParameterConverter>
         <converters:FunctionCommandParameterConverter x:Key="FunctionCommandParameterConverter"></converters:FunctionCommandParameterConverter>
+        <converters:OperationCommandParameterConverter x:Key="OperationCommandParameterConverter"></converters:OperationCommandParameterConverter>
         <converters:FunctionAndOperatorCommandParameterConverter x:Key="FunctionAndOperatorCommandParameterConverter"></converters:FunctionAndOperatorCommandParameterConverter>
         <converters:TrigonometricFunctionCommandParameterConverter x:Key="TrigonometricFunctionCommandParameterConverter"></converters:TrigonometricFunctionCommandParameterConverter>
-
-        <ObjectDataProvider x:Key="DataFromEnum" MethodName="GetValues"
-                            ObjectType="{x:Type system:Enum}">
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="enums:ModeEnum"/>
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
 
         <system:Int32 x:Key="ZeroOperandValue">0</system:Int32>
         <system:Int32 x:Key="FirstOperandValue">1</system:Int32>
@@ -35,37 +29,181 @@
         <system:Int32 x:Key="SeventhOperandValue">7</system:Int32>
         <system:Int32 x:Key="EightOperandValue">8</system:Int32>
         <system:Int32 x:Key="NinthOperandValue">9</system:Int32>
+
+        <ObjectDataProvider x:Key="AngleUnitTypes" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="enums:AngleUnitType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <Style TargetType="Button" x:Key="NumericBtnStyle">
+            <Setter Property="Background" Value="#D1CCB8"></Setter>
+            <Setter Property="BorderThickness" Value="0"></Setter>
+            <Setter Property="Margin" Value="0,2,5,0"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border"
+                                CornerRadius="5"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter"
+                                              Focusable="False"
+                                              RecognizesAccessKey="True"
+                                              Margin="{TemplateBinding Padding}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FAFADF"></Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#DECB7F"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Button" x:Key="OperationBtnStyle">
+            <Setter Property="Background" Value="#D1C0A0"></Setter>
+            <Setter Property="BorderThickness" Value="0"></Setter>
+            <Setter Property="Margin" Value="0,2,5,0"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border"
+                                CornerRadius="5"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter"
+                                              Focusable="False"
+                                              RecognizesAccessKey="True"
+                                              Margin="{TemplateBinding Padding}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FDCF79"></Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#D5A03B"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Button" x:Key="DeleteBtnStyle">
+            <Setter Property="Background" Value="#DF8A8A"></Setter>
+            <Setter Property="Foreground" Value="#FFFFFF"></Setter>
+            <Setter Property="BorderThickness" Value="0"></Setter>
+            <Setter Property="Margin" Value="0,2,5,0"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border"
+                                CornerRadius="5"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter"
+                                              Focusable="False"
+                                              RecognizesAccessKey="True" 
+                                              Margin="{TemplateBinding Padding}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FFD6D6"></Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#EE4C4C"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Button" x:Key="OffBtnStyle">
+            <Setter Property="Background" Value="#DF8A8A"></Setter>
+            <Setter Property="Foreground" Value="#FFFFFF"></Setter>
+            <Setter Property="BorderThickness" Value="0"></Setter>
+            <Setter Property="Margin" Value="0,2,5,0"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border"
+                                CornerRadius="5"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter"
+                                              Focusable="False"
+                                              RecognizesAccessKey="True" 
+                                              Margin="{TemplateBinding Padding}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FFD6D6"></Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#EE4C4C"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <UserControl.InputBindings>
         <KeyBinding Key="Y" Command="{Binding PowBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.PowOperatorBtnPressed}" />
-                    <Binding Source="{x:Static enums:OperatorType.Pow}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.PowOperatorBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:OperatorType.Pow}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="D8" Modifiers="Shift" Command="{Binding LeftParenthesisBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.LeftParenthesisBtnPressed}" />
-                    <Binding Source="{x:Static enums:OperatorType.LeftParenthesis}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.LeftParenthesisBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:OperatorType.LeftParenthesis}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="D9" Modifiers="Shift" Command="{Binding RightParenthesisBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.RightParenthesisBtnPressed}" />
-                    <Binding Source="{x:Static enums:OperatorType.RightParenthesis}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.RightParenthesisBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:OperatorType.RightParenthesis}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="NumPad7" Command="{Binding OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource SeventhOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -73,7 +211,7 @@
         <KeyBinding Key="D7" Command="{Binding OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource SeventhOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -81,7 +219,7 @@
         <KeyBinding Key="NumPad8" Command="{Binding OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource EightOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -89,7 +227,7 @@
         <KeyBinding Key="D8" Command="{Binding OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource EightOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -97,7 +235,7 @@
         <KeyBinding Key="NumPad9" Command="{Binding OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource NinthOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -105,7 +243,7 @@
         <KeyBinding Key="D9" Command="{Binding OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource NinthOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -113,16 +251,16 @@
         <KeyBinding Key="Delete" Command="{Binding DelBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperationCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.DelBtnPressed}" />
-                    <Binding Source="{x:Static enums:SimpleOperationType.Del}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.DelBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:OperationType.Del}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="Backspace" Command="{Binding AcBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperationCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.AcBtnPressed}" />
-                    <Binding Source="{x:Static enums:SimpleOperationType.Ac}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.AcBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:OperationType.Ac}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
@@ -130,45 +268,45 @@
         <KeyBinding Key="S" Command="{Binding TrigonometricFunctionBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource TrigonometricFunctionCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.SinFunctionBtnPresesd}" />
-                    <Binding Source="{x:Static enums:UserOperationType.ArcSinFunctionBtnPressed}" />
-                    <Binding Source="{x:Static enums:TrigonometricFunctionType.Sin}" />
-                    <Binding Source="{x:Static enums:TrigonometricFunctionType.ArcSin}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.SinFunctionBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.ArcSinFunctionBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:TrigonometricFunctionType.Sin}" />
+                    <Binding Source="{x:Static staticValueEnums:TrigonometricFunctionType.ArcSin}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="C" Command="{Binding TrigonometricFunctionBtnCommand, Mode=OneTime}" >
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource TrigonometricFunctionCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.CosFunctionBtnPressed}" />
-                    <Binding Source="{x:Static enums:UserOperationType.ArcCosFunctionBtnPressed}" />
-                    <Binding Source="{x:Static enums:TrigonometricFunctionType.Cos}" />
-                    <Binding Source="{x:Static enums:TrigonometricFunctionType.ArcCos}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.CosFunctionBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.ArcCosFunctionBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:TrigonometricFunctionType.Cos}" />
+                    <Binding Source="{x:Static staticValueEnums:TrigonometricFunctionType.ArcCos}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="T" Command="{Binding TrigonometricFunctionBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource TrigonometricFunctionCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.TanFunctionBtnPressed}" />
-                    <Binding Source="{x:Static enums:UserOperationType.ArcTanFunctionBtnPressed}" />
-                    <Binding Source="{x:Static enums:TrigonometricFunctionType.Tan}" />
-                    <Binding Source="{x:Static enums:TrigonometricFunctionType.ArcTan}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.TanFunctionBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.ArcTanFunctionBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:TrigonometricFunctionType.Tan}" />
+                    <Binding Source="{x:Static staticValueEnums:TrigonometricFunctionType.ArcTan}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="D5" Modifiers="Shift" Command="{Binding ModBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.ModOperatorBtnPressed}" />
-                    <Binding Source="{x:Static enums:OperatorType.Modulus}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.ModOperatorBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:OperatorType.Modulus}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="NumPad4" Command="{Binding OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource FourthOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -176,7 +314,7 @@
         <KeyBinding Key="D4" Command="{Binding OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource FourthOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -184,7 +322,7 @@
         <KeyBinding Key="NumPad5" Command="{Binding OperandBtnCommand, Mode=OneTime}" >
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource FifthOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -192,7 +330,7 @@
         <KeyBinding Key="D5" Command="{Binding OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource FifthOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -200,7 +338,7 @@
         <KeyBinding Key="NumPad6" Command="{Binding OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource SixthOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -208,7 +346,7 @@
         <KeyBinding Key="D6" Command="{Binding OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource SixthOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -216,24 +354,24 @@
         <KeyBinding Key="Multiply" Command="{Binding BasicArithmeticOperatorBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.BasicArithmeticOperatorBtnPressed}" />
-                    <Binding Source="{x:Static enums:OperatorType.Multiplication}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.BasicArithmeticOperatorBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:OperatorType.Multiplication}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="Divide" Command="{Binding BasicArithmeticOperatorBtnCommand, Mode=OneTime}" >
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.BasicArithmeticOperatorBtnPressed}" />
-                    <Binding Source="{x:Static enums:OperatorType.Division}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.BasicArithmeticOperatorBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:OperatorType.Division}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="D6" Modifiers="Shift" Command="{Binding  BasicArithmeticOperatorBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.BasicArithmeticOperatorBtnPressed}" />
-                    <Binding Source="{x:Static enums:OperatorType.Division}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.BasicArithmeticOperatorBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:OperatorType.Division}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
@@ -241,43 +379,43 @@
         <KeyBinding Key="N" Command="{Binding LnBtnCommand, Mode=OneTime}" >
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource FunctionAndOperatorCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.LnFunctionBtnPressed}" />
-                    <Binding Source="{x:Static enums:UserOperationType.EToTheNthPowBtnPressed}" />
-                    <Binding Source="{x:Static enums:FunctionType.Ln}" />
-                    <Binding Source="{x:Static enums:OperatorType.Pow}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.LnFunctionBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.EToTheNthPowBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:FunctionType.Ln}" />
+                    <Binding Source="{x:Static staticValueEnums:OperatorType.Pow}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="L" Command="{Binding LogBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource FunctionAndOperatorCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.LogFunctionBtnPressed}" />
-                    <Binding Source="{x:Static enums:UserOperationType.TenToTheNthPowBtnPressed}" />
-                    <Binding Source="{x:Static enums:FunctionType.Log}" />
-                    <Binding Source="{x:Static enums:OperatorType.Pow}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.LogFunctionBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.TenToTheNthPowBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:FunctionType.Log}" />
+                    <Binding Source="{x:Static staticValueEnums:OperatorType.Pow}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="Q" Command="{Binding SqrtBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource FunctionCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.SqrtFunctionBtnPressed}" />
-                    <Binding Source="{x:Static enums:FunctionType.Sqrt}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.SqrtFunctionBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:FunctionType.Sqrt}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="R" Command="{Binding YRootBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource FunctionCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.YRootFunctionBtnPressed}" />
-                    <Binding Source="{x:Static enums:FunctionType.YRoot}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.YRootFunctionBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:FunctionType.YRoot}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="NumPad1" Command="{Binding  OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource FirstOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -285,7 +423,7 @@
         <KeyBinding Key="D1" Command="{Binding  OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource FirstOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -293,7 +431,7 @@
         <KeyBinding Key="NumPad2" Command="{Binding  OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource SecondOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -301,7 +439,7 @@
         <KeyBinding Key="D2" Command="{Binding  OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource SecondOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -309,7 +447,7 @@
         <KeyBinding Key="NumPad3" Command="{Binding  OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource ThirdOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -317,7 +455,7 @@
         <KeyBinding Key="D3" Command="{Binding  OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource ThirdOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -325,24 +463,24 @@
         <KeyBinding Key="Add" Command="{Binding  BasicArithmeticOperatorBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.BasicArithmeticOperatorBtnPressed}" />
-                    <Binding Source="{x:Static enums:OperatorType.Addition}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.BasicArithmeticOperatorBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:OperatorType.Addition}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="D3" Modifiers="Shift" Command="{Binding  BasicArithmeticOperatorBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.BasicArithmeticOperatorBtnPressed}" />
-                    <Binding Source="{x:Static enums:OperatorType.Addition}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.BasicArithmeticOperatorBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:OperatorType.Addition}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="Subtract" Command="{Binding  BasicArithmeticOperatorBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.BasicArithmeticOperatorBtnPressed}" />
-                    <Binding Source="{x:Static enums:OperatorType.Subtraction}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.BasicArithmeticOperatorBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:OperatorType.Subtraction}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
@@ -351,23 +489,23 @@
         <KeyBinding Key="E" Command="{Binding EBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource FunctionCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.EFunctionBtnPressed}" />
-                    <Binding Source="{x:Static enums:FunctionType.E}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.EFunctionBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:FunctionType.E}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="D4" Modifiers="Shift" Command="{Binding FactBtnCommand, Mode=OneTime}" >
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.FactOperatorBtnPressed}" />
-                    <Binding Source="{x:Static enums:OperatorType.Factorial}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.FactOperatorBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:OperatorType.Factorial}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="NumPad0" Command="{Binding  OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource ZeroOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -375,7 +513,7 @@
         <KeyBinding Key="D0" Command="{Binding  OperandBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                     <Binding Source="{StaticResource ZeroOperandValue}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
@@ -383,30 +521,44 @@
         <KeyBinding Key="Decimal" Command="{Binding CommaBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperationCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.CommaBtnPressed}" />
-                    <Binding Source="{x:Static enums:SimpleOperationType.Comma}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.CommaBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:OperationType.Comma}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Key="A" Command="{Binding AnsBtnCommand, Mode=OneTime}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource OperationCommandParameterConverter}">
-                    <Binding Source="{x:Static enums:UserOperationType.AnsBtnPressed}" />
-                    <Binding Source="{x:Static enums:SimpleOperationType.Ans}" />
+                    <Binding Source="{x:Static enums:UserInteractionType.AnsBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:OperationType.Ans}" />
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
-        <KeyBinding Key="Enter" Command="{Binding  EqualBtnCommand, Mode=OneTime}" CommandParameter="=" />
-        <KeyBinding Key="D7" Modifiers="Shift" Command="{Binding EqualBtnCommand, Mode=OneTime}" CommandParameter="=" />
+        <KeyBinding Key="Enter" Command="{Binding  EqualBtnCommand, Mode=OneTime}">
+            <KeyBinding.CommandParameter>
+                <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
+                    <Binding Source="{x:Static enums:UserInteractionType.EqualBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:OperatorType.Equal}" />
+                </MultiBinding>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="D7" Modifiers="Shift" Command="{Binding EqualBtnCommand, Mode=OneTime}">
+            <KeyBinding.CommandParameter>
+                <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
+                    <Binding Source="{x:Static enums:UserInteractionType.EqualBtnPressed}" />
+                    <Binding Source="{x:Static staticValueEnums:OperatorType.Equal}" />
+                </MultiBinding>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
     </UserControl.InputBindings>
 
-    <Grid Background="{DynamicResource BodyColorBrush}">
+    <Grid Background="#DFD9C9">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.3*"></RowDefinition>
             <RowDefinition Height="0.7*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Background="{DynamicResource HeaderColorBrush}">
+        <Grid Grid.Row="0" Background="#EFEDE4">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="0.4*" MinHeight="25"></RowDefinition>
@@ -416,8 +568,8 @@
             <StackPanel Height="25" Margin="0,0,10,0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
                 <TextBlock Text="Mode" Margin="0,5,5,0" VerticalAlignment="Center"/>
                 <ComboBox Margin="0,5,0,0" VerticalContentAlignment="Center"
-                          ItemsSource="{Binding Source={StaticResource DataFromEnum}}"
-                          SelectedItem="{Binding SelectedMode, UpdateSourceTrigger=PropertyChanged}"/>
+                          ItemsSource="{Binding Source={StaticResource AngleUnitTypes}}"
+                          SelectedItem="{Binding SelectedAngleUnit, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
 
             <TextBlock Grid.Row="1" Text="{Binding SeriesOfComputerTextBoxValue}" HorizontalAlignment="Right" Margin="10,5,10,5"/>
@@ -450,63 +602,60 @@
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <!-- First Row -->
-            <Button Grid.Row="0" Grid.Column="8" Grid.ColumnSpan="2" Style="{DynamicResource FunctionButtonStyle}" behaviors:CloseBtnOnClickBehaviour.IsEnabled="True">
+            <Button Grid.Row="0" Grid.Column="8" Grid.ColumnSpan="2" Style="{DynamicResource OffBtnStyle}" Command="{Binding OffBtnCommand}">
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="OFF"/>
                 </Viewbox>
             </Button>
 
-            <!-- Second Row -->
-            <Button Grid.Row="1" Grid.Column="0" Style="{DynamicResource OperationButtonStyle}" Command="{Binding PowBtnCommand}">
+            <Button Grid.Row="1" Grid.Column="0" Style="{DynamicResource OperationBtnStyle}" Command="{Binding PowBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.PowOperatorBtnPressed}" />
-                        <Binding Source="{x:Static enums:OperatorType.Pow}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.PowOperatorBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:OperatorType.Pow}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="xⁿ"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="1" Grid.Column="1" Style="{DynamicResource OperationButtonStyle}" Command="{Binding SquareOfXNumberBtnCommand}">
+            <Button Grid.Row="1" Grid.Column="1" Style="{DynamicResource OperationBtnStyle}" Command="{Binding SquareOfXNumberBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.SquareOfXNumberBtnPressed}" />
-                        <Binding Source="{x:Static enums:OperatorType.Pow}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.SquareOfXNumberBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:OperatorType.Pow}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="x²"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="1" Grid.Column="2" Style="{DynamicResource OperationButtonStyle}" Command="{Binding LeftParenthesisBtnCommand}">
+            <Button Grid.Row="1" Grid.Column="2" Style="{DynamicResource OperationBtnStyle}" Command="{Binding LeftParenthesisBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.LeftParenthesisBtnPressed}" />
-                        <Binding Source="{x:Static enums:OperatorType.LeftParenthesis}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.LeftParenthesisBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:OperatorType.LeftParenthesis}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="("/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="1" Grid.Column="3" Style="{DynamicResource OperationButtonStyle}" Command="{Binding RightParenthesisBtnCommand}">
+            <Button Grid.Row="1" Grid.Column="3" Style="{DynamicResource OperationBtnStyle}" Command="{Binding RightParenthesisBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.LeftParenthesisBtnPressed}" />
-                        <Binding Source="{x:Static enums:OperatorType.RightParenthesis}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.RightParenthesisBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:OperatorType.RightParenthesis}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text=")"/>
                 </Viewbox>
             </Button>
-
-            <Button Grid.Row="1" Grid.Column="5" Style="{DynamicResource NumericButtonStyle}" Command="{Binding OperandBtnCommand}">
+            <Button Grid.Row="1" Grid.Column="5" Style="{DynamicResource NumericBtnStyle}" Command="{Binding OperandBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                         <Binding Source="{StaticResource SeventhOperandValue}" />
                     </MultiBinding>
                 </Button.CommandParameter>
@@ -514,10 +663,10 @@
                     <TextBlock Text="7"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="1" Grid.Column="6" Style="{DynamicResource NumericButtonStyle}" Command="{Binding OperandBtnCommand}">
+            <Button Grid.Row="1" Grid.Column="6" Style="{DynamicResource NumericBtnStyle}" Command="{Binding OperandBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                         <Binding Source="{StaticResource EightOperandValue}" />
                     </MultiBinding>
                 </Button.CommandParameter>
@@ -525,10 +674,10 @@
                     <TextBlock Text="8"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="1" Grid.Column="7" Style="{DynamicResource NumericButtonStyle}" Command="{Binding OperandBtnCommand}">
+            <Button Grid.Row="1" Grid.Column="7" Style="{DynamicResource NumericBtnStyle}" Command="{Binding OperandBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                         <Binding Source="{StaticResource NinthOperandValue}" />
                     </MultiBinding>
                 </Button.CommandParameter>
@@ -536,22 +685,22 @@
                     <TextBlock Text="9"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="1" Grid.Column="8" Style="{DynamicResource FunctionButtonStyle}" Command="{Binding DelBtnCommand}" Padding="5">
+            <Button Grid.Row="1" Grid.Column="8" Style="{DynamicResource DeleteBtnStyle}" Command="{Binding DelBtnCommand}" Padding="5">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperationCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.DelBtnPressed}" />
-                        <Binding Source="{x:Static enums:SimpleOperationType.Del}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.DelBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:OperationType.Del}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="DEL"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="1" Grid.Column="9" Style="{DynamicResource FunctionButtonStyle}" Command="{Binding AcBtnCommand}" Padding="5">
+            <Button Grid.Row="1" Grid.Column="9" Style="{DynamicResource DeleteBtnStyle}" Command="{Binding AcBtnCommand}" Padding="5">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperationCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.AcBtnPressed}" />
-                        <Binding Source="{x:Static enums:SimpleOperationType.Ac}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.AcBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:OperationType.Ac}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
@@ -559,62 +708,60 @@
                 </Viewbox>
             </Button>
 
-            <!-- Third row. -->
-            <Button Grid.Row="2" Grid.Column="0" Style="{DynamicResource OperationButtonStyle}" Command="{Binding TrigonometricFunctionBtnCommand}">
+            <Button Grid.Row="2" Grid.Column="0" Style="{DynamicResource OperationBtnStyle}" Command="{Binding TrigonometricFunctionBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource TrigonometricFunctionCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.SinFunctionBtnPresesd}" />
-                        <Binding Source="{x:Static enums:UserOperationType.ArcSinFunctionBtnPressed}" />
-                        <Binding Source="{x:Static enums:TrigonometricFunctionType.Sin}" />
-                        <Binding Source="{x:Static enums:TrigonometricFunctionType.ArcSin}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.SinFunctionBtnPressed}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.ArcSinFunctionBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:TrigonometricFunctionType.Sin}" />
+                        <Binding Source="{x:Static staticValueEnums:TrigonometricFunctionType.ArcSin}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="{Binding SinButtonTextBlockValue}"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="2" Grid.Column="1" Style="{DynamicResource OperationButtonStyle}" Command="{Binding TrigonometricFunctionBtnCommand}">
+            <Button Grid.Row="2" Grid.Column="1" Style="{DynamicResource OperationBtnStyle}" Command="{Binding TrigonometricFunctionBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource TrigonometricFunctionCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.CosFunctionBtnPressed}" />
-                        <Binding Source="{x:Static enums:UserOperationType.ArcCosFunctionBtnPressed}" />
-                        <Binding Source="{x:Static enums:TrigonometricFunctionType.Cos}" />
-                        <Binding Source="{x:Static enums:TrigonometricFunctionType.ArcCos}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.CosFunctionBtnPressed}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.ArcCosFunctionBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:TrigonometricFunctionType.Cos}" />
+                        <Binding Source="{x:Static staticValueEnums:TrigonometricFunctionType.ArcCos}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="{Binding CosButtonTextBlockValue}"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="2" Grid.Column="2" Style="{DynamicResource OperationButtonStyle}" Command="{Binding TrigonometricFunctionBtnCommand}">
+            <Button Grid.Row="2" Grid.Column="2" Style="{DynamicResource OperationBtnStyle}" Command="{Binding TrigonometricFunctionBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource TrigonometricFunctionCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.TanFunctionBtnPressed}" />
-                        <Binding Source="{x:Static enums:UserOperationType.ArcTanFunctionBtnPressed}" />
-                        <Binding Source="{x:Static enums:TrigonometricFunctionType.Tan}" />
-                        <Binding Source="{x:Static enums:TrigonometricFunctionType.ArcTan}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.TanFunctionBtnPressed}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.ArcTanFunctionBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:TrigonometricFunctionType.Tan}" />
+                        <Binding Source="{x:Static staticValueEnums:TrigonometricFunctionType.ArcTan}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="{Binding TanButtonTextBlockValue}"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="2" Grid.Column="3" Style="{DynamicResource OperationButtonStyle}" Command="{Binding ModBtnCommand}">
+            <Button Grid.Row="2" Grid.Column="3" Style="{DynamicResource OperationBtnStyle}" Command="{Binding ModBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.ModOperatorBtnPressed}" />
-                        <Binding Source="{x:Static enums:OperatorType.Modulus}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.ModOperatorBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:OperatorType.Modulus}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="%"/>
                 </Viewbox>
             </Button>
-
-            <Button Grid.Row="2" Grid.Column="5" Style="{DynamicResource NumericButtonStyle}" Command="{Binding OperandBtnCommand}">
+            <Button Grid.Row="2" Grid.Column="5" Style="{DynamicResource NumericBtnStyle}" Command="{Binding OperandBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                         <Binding Source="{StaticResource FourthOperandValue}" />
                     </MultiBinding>
                 </Button.CommandParameter>
@@ -622,10 +769,10 @@
                     <TextBlock Text="4"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="2" Grid.Column="6"  Style="{DynamicResource NumericButtonStyle}" Command="{Binding OperandBtnCommand}">
+            <Button Grid.Row="2" Grid.Column="6"  Style="{DynamicResource NumericBtnStyle}" Command="{Binding OperandBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                         <Binding Source="{StaticResource FifthOperandValue}" />
                     </MultiBinding>
                 </Button.CommandParameter>
@@ -633,10 +780,10 @@
                     <TextBlock Text="5"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="2" Grid.Column="7" Style="{DynamicResource NumericButtonStyle}" Command="{Binding OperandBtnCommand}">
+            <Button Grid.Row="2" Grid.Column="7" Style="{DynamicResource NumericBtnStyle}" Command="{Binding OperandBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                         <Binding Source="{StaticResource SixthOperandValue}" />
                     </MultiBinding>
                 </Button.CommandParameter>
@@ -644,22 +791,22 @@
                     <TextBlock Text="6"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="2" Grid.Column="8" Style="{DynamicResource OperationButtonStyle}" Command="{Binding BasicArithmeticOperatorBtnCommand}">
+            <Button Grid.Row="2" Grid.Column="8" Style="{DynamicResource OperationBtnStyle}" Command="{Binding BasicArithmeticOperatorBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.BasicArithmeticOperatorBtnPressed}" />
-                        <Binding Source="{x:Static enums:OperatorType.Multiplication}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.BasicArithmeticOperatorBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:OperatorType.Multiplication}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="*"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="2" Grid.Column="9" Style="{DynamicResource OperationButtonStyle}" Command="{Binding BasicArithmeticOperatorBtnCommand}">
+            <Button Grid.Row="2" Grid.Column="9" Style="{DynamicResource OperationBtnStyle}" Command="{Binding BasicArithmeticOperatorBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.BasicArithmeticOperatorBtnPressed}" />
-                        <Binding Source="{x:Static enums:OperatorType.Division}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.BasicArithmeticOperatorBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:OperatorType.Division}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
@@ -667,60 +814,58 @@
                 </Viewbox>
             </Button>
 
-            <!-- Fourth row. -->
-            <Button Grid.Row="3" Grid.Column="0" Style="{DynamicResource OperationButtonStyle}" Command="{Binding LnBtnCommand}">
+            <Button Grid.Row="3" Grid.Column="0" Style="{DynamicResource OperationBtnStyle}" Command="{Binding LnBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource FunctionAndOperatorCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.LnFunctionBtnPressed}" />
-                        <Binding Source="{x:Static enums:UserOperationType.EToTheNthPowBtnPressed}" />
-                        <Binding Source="{x:Static enums:FunctionType.Ln}" />
-                        <Binding Source="{x:Static enums:OperatorType.Pow}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.LnFunctionBtnPressed}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.EToTheNthPowBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:FunctionType.Ln}" />
+                        <Binding Source="{x:Static staticValueEnums:OperatorType.Pow}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="{Binding LnButtonTextBlockValue}"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="3" Grid.Column="1" Style="{DynamicResource OperationButtonStyle}" Command="{Binding LogBtnCommand}">
+            <Button Grid.Row="3" Grid.Column="1" Style="{DynamicResource OperationBtnStyle}" Command="{Binding LogBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource FunctionAndOperatorCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.LogFunctionBtnPressed}" />
-                        <Binding Source="{x:Static enums:UserOperationType.TenToTheNthPowBtnPressed}" />
-                        <Binding Source="{x:Static enums:FunctionType.Log}" />
-                        <Binding Source="{x:Static enums:OperatorType.Pow}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.LogFunctionBtnPressed}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.TenToTheNthPowBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:FunctionType.Log}" />
+                        <Binding Source="{x:Static staticValueEnums:OperatorType.Pow}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="{Binding LogButtonTextBlockValue}"></TextBlock>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="3" Grid.Column="2" Style="{DynamicResource OperationButtonStyle}" Command="{Binding SqrtBtnCommand}">
+            <Button Grid.Row="3" Grid.Column="2" Style="{DynamicResource OperationBtnStyle}" Command="{Binding SqrtBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource FunctionCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.SqrtFunctionBtnPressed}" />
-                        <Binding Source="{x:Static enums:FunctionType.Sqrt}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.SqrtFunctionBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:FunctionType.Sqrt}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="√"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="3" Grid.Column="3" Style="{DynamicResource OperationButtonStyle}" Command="{Binding YRootBtnCommand}">
+            <Button Grid.Row="3" Grid.Column="3" Style="{DynamicResource OperationBtnStyle}" Command="{Binding YRootBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource FunctionCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.YRootFunctionBtnPressed}" />
-                        <Binding Source="{x:Static enums:FunctionType.YRoot}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.YRootFunctionBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:FunctionType.YRoot}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="ⁿ√ₓ"/>
                 </Viewbox>
             </Button>
-
-            <Button Grid.Row="3" Grid.Column="5" Style="{DynamicResource NumericButtonStyle}" Command="{Binding OperandBtnCommand}">
+            <Button Grid.Row="3" Grid.Column="5" Style="{DynamicResource NumericBtnStyle}" Command="{Binding OperandBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                         <Binding Source="{StaticResource FirstOperandValue}" />
                     </MultiBinding>
                 </Button.CommandParameter>
@@ -728,10 +873,10 @@
                     <TextBlock Text="1"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="3" Grid.Column="6" Style="{DynamicResource NumericButtonStyle}" Command="{Binding OperandBtnCommand}">
+            <Button Grid.Row="3" Grid.Column="6" Style="{DynamicResource NumericBtnStyle}" Command="{Binding OperandBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                         <Binding Source="{StaticResource SecondOperandValue}" />
                     </MultiBinding>
                 </Button.CommandParameter>
@@ -739,10 +884,10 @@
                     <TextBlock Text="2"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="3" Grid.Column="7" Style="{DynamicResource NumericButtonStyle}" Command="{Binding OperandBtnCommand}">
+            <Button Grid.Row="3" Grid.Column="7" Style="{DynamicResource NumericBtnStyle}" Command="{Binding OperandBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                         <Binding Source="{StaticResource ThirdOperandValue}" />
                     </MultiBinding>
                 </Button.CommandParameter>
@@ -750,22 +895,22 @@
                     <TextBlock Text="3"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="3" Grid.Column="8" Style="{DynamicResource OperationButtonStyle}" Command="{Binding BasicArithmeticOperatorBtnCommand}">
+            <Button Grid.Row="3" Grid.Column="8" Style="{DynamicResource OperationBtnStyle}" Command="{Binding BasicArithmeticOperatorBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.BasicArithmeticOperatorBtnPressed}" />
-                        <Binding Source="{x:Static enums:OperatorType.Addition}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.BasicArithmeticOperatorBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:OperatorType.Addition}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="+"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="3" Grid.Column="9" Style="{DynamicResource OperationButtonStyle}" Command="{Binding BasicArithmeticOperatorBtnCommand}">
+            <Button Grid.Row="3" Grid.Column="9" Style="{DynamicResource OperationBtnStyle}" Command="{Binding BasicArithmeticOperatorBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.BasicArithmeticOperatorBtnPressed}" />
-                        <Binding Source="{x:Static enums:OperatorType.Subtraction}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.BasicArithmeticOperatorBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:OperatorType.Subtraction}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
@@ -773,44 +918,43 @@
                 </Viewbox>
             </Button>
 
-            <!-- Fifth row. -->
-            <Button Grid.Row="4" Grid.Column="0" Style="{DynamicResource OperationButtonStyle}" Command="{Binding ShiftBtnCommand}">
+            <Button Grid.Row="4" Grid.Column="0" Style="{DynamicResource OperationBtnStyle}" Command="{Binding ShiftBtnCommand}">
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="Shift"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="4" Grid.Column="1" Style="{DynamicResource OperationButtonStyle}" Command="{Binding EBtnCommand}">
+            <Button Grid.Row="4" Grid.Column="1" Style="{DynamicResource OperationBtnStyle}" Command="{Binding EBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource FunctionCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.EFunctionBtnPressed}" />
-                        <Binding Source="{x:Static enums:FunctionType.E}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.EFunctionBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:FunctionType.E}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="e"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="4" Grid.Column="2" Style="{DynamicResource OperationButtonStyle}" Command="{Binding FactBtnCommand}">
+            <Button Grid.Row="4" Grid.Column="2" Style="{DynamicResource OperationBtnStyle}" Command="{Binding FactBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.FactOperatorBtnPressed}" />
-                        <Binding Source="{x:Static enums:OperatorType.Factorial}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.FactOperatorBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:OperatorType.Factorial}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="x!"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="4" Grid.Column="3" Style="{DynamicResource OperationButtonStyle}" Command="{Binding PlusMinusBtnCommand}">
+            <Button Grid.Row="4" Grid.Column="3" Style="{DynamicResource OperationBtnStyle}" Command="{Binding PlusMinusBtnCommand}">
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="±"/>
                 </Viewbox>
             </Button>
 
-            <Button Grid.Row="4" Grid.Column="5" Grid.ColumnSpan="2" Style="{DynamicResource NumericButtonStyle}" Command="{Binding OperandBtnCommand}">
+            <Button Grid.Row="4" Grid.Column="5" Grid.ColumnSpan="2" Style="{DynamicResource NumericBtnStyle}" Command="{Binding OperandBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperandCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.OperandBtnPressed}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.OperandBtnPressed}" />
                         <Binding Source="{StaticResource ZeroOperandValue}" />
                     </MultiBinding>
                 </Button.CommandParameter>
@@ -818,29 +962,35 @@
                     <TextBlock Text="0"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="4" Grid.Column="7" Style="{DynamicResource NumericButtonStyle}" Command="{Binding CommaBtnCommand}">
+            <Button Grid.Row="4" Grid.Column="7" Style="{DynamicResource NumericBtnStyle}" Command="{Binding CommaBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperationCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.CommaBtnPressed}" />
-                        <Binding Source="{x:Static enums:SimpleOperationType.Comma}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.CommaBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:OperationType.Comma}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text=","/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="4" Grid.Column="8" Style="{DynamicResource OperationButtonStyle}" Command="{Binding AnsBtnCommand}">
+            <Button Grid.Row="4" Grid.Column="8" Style="{DynamicResource OperationBtnStyle}" Command="{Binding AnsBtnCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OperationCommandParameterConverter}">
-                        <Binding Source="{x:Static enums:UserOperationType.AnsBtnPressed}" />
-                        <Binding Source="{x:Static enums:SimpleOperationType.Ans}" />
+                        <Binding Source="{x:Static enums:UserInteractionType.AnsBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:OperationType.Ans}" />
                     </MultiBinding>
                 </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="Ans"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Row="4" Grid.Column="9" Style="{DynamicResource OperationButtonStyle}" Command="{Binding EqualBtnCommand}" CommandParameter="=">
+            <Button Grid.Row="4" Grid.Column="9" Style="{DynamicResource OperationBtnStyle}" Command="{Binding EqualBtnCommand}">
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource OperatorCommandParameterConverter}">
+                        <Binding Source="{x:Static enums:UserInteractionType.EqualBtnPressed}" />
+                        <Binding Source="{x:Static staticValueEnums:OperatorType.Equal}" />
+                    </MultiBinding>
+                </Button.CommandParameter>
                 <Viewbox StretchDirection="Both" Stretch="Uniform">
                     <TextBlock Text="="/>
                 </Viewbox>
